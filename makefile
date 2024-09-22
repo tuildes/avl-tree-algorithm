@@ -1,7 +1,7 @@
 OBJS	= program.o
 SOURCE	= program.c
 # HEADER	= library.h
-OUT	= program
+OUT	= myavl
 CC	 = gcc
 FLAGS	 = -g -c -Wall -Wextra -Werror
 LFLAGS	 = -lm
