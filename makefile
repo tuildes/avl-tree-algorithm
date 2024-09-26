@@ -1,6 +1,6 @@
-OBJS	= program.o
-SOURCE	= program.c
-# HEADER	= library.h
+OBJS	= main.o avl.o
+SOURCE	= main.c avl.c
+HEADER	= avl.h
 OUT	= myavl
 CC	 = gcc
 FLAGS	 = -g -c -Wall -Wextra -Werror
@@ -10,7 +10,7 @@ all: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)
 
 program.o: program.c
-	$(CC) $(FLAGS) program.c 
+	$(CC) $(FLAGS) $(OBJS) 
 
 clean:
 	rm -f *.o *.gch $(OUT)
