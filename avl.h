@@ -6,16 +6,16 @@
 #include <stdlib.h>
 
 // Struct NODO
-struct Nodo {
+struct NODO_STRUCT {
     unsigned int level;
     int value;
 
     // Ponteiros para outros NODOs
-    struct _nodo *father,
-                 *left,
-                 *right;
+    struct NODO_STRUCT *father,
+                       *left,
+                       *right;
 };
-typedef struct Nodo Nodo;
+typedef struct NODO_STRUCT Nodo;
 
 // Imprime a ARVORE de forma recursiva
 // Imprime de forma ordenada
@@ -31,8 +31,9 @@ Nodo* delete_nodo(Nodo *root, int target);
 Nodo* create_tree(int value);
 
 // Insere na arvore
-Nodo* _insert_tree(Nodo *actual, Nodo *father, int value);
-Nodo* insert_tree(Nodo *root, int value);
+Nodo* _create_nodo(Nodo *father, int value);
+int _insert_tree(Nodo *actual, Nodo *father, int value);
+int insert_tree(Nodo *root, int value);
 
 // Destroi a arvore e livra a memoria alocada
 void destroy_tree(Nodo *root);
@@ -48,7 +49,5 @@ void rotate_tree(Nodo *n);
 // Retorna NULL para nao encontrado
 // Retorna o PONTEIRO para o nodo com o valor encontrado
 Nodo* search_binary(Nodo *root, int value);
-
-int insert_tree(Nodo *n, int value, Nodo *f);
 
 #endif // AVL_H_

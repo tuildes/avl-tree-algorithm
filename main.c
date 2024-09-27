@@ -1,20 +1,22 @@
 #include "avl.h"
 
-int main (/* int argc, char *argv[] */) {
+int main (void) {
 
     Nodo *root;
+    char choose;
+    int value;
 
-    root = create_nodo(1);
-    insert_tree(root, 2, NULL);
-    insert_tree(root, 10, NULL);
-    insert_tree(root, 200, NULL);
-    insert_tree(root, 5, NULL);
-    insert_tree(root, -12, NULL);
-    insert_tree(root, 1, NULL);
-    
-    print_tree(search_binary(root, 10));
+    root = create_tree(1);
 
-    destroy_nodo(root);
+    do {
+        scanf("%c %d", &choose, &value);
+        getchar(); // Limpar buffer de char
+    } while (operate_tree(choose, value, root));
+
+    print_tree(root);
+
+    // Libera memoria armazenada
+    destroy_tree(root);
 
     return 0;
 }

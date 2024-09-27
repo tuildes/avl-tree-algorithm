@@ -1,38 +1,40 @@
 #include "avl.h"
 
-Nodo* search_binary(Nodo *n, int value) {
-    if (n == NULL)
+Nodo* search_binary(Nodo *root, int value) {
+    if (root == NULL)
         return NULL;
 
-    if (value < n->value)
-        return search_binary(n->left, value);
+    if (value < root->value)
+        return search_binary(root->left, value);
 
-    else if (value > n->value)
-        return search_binary(n->right, value);
+    else if (value > root->value)
+        return search_binary(root->right, value);
 
-    return n;
+    return root;
 }
 
-Nodo* create_nodo(int value) {
+Nodo* _create_nodo(Nodo *father, int value) {
     Nodo *n;
 
     if ((n = (Nodo *) malloc(sizeof(Nodo))) == NULL)
         return NULL;
 
     n->value = value;
-    n->level = 0;
-    n->father = NULL;
+    n->level = (father != NULL) ? (father->level + 1) : 0;
+    n->father = father;
     n->left = NULL;
     n->right = NULL;
 
-    return n;
+    return n; 
 }
 
+Nodo* create_tree(int value) { return _create_nodo(NULL, value); }
+
 // Destruir NODO
-void destroy_nodo(Nodo *n) {
+void destroy_tree(Nodo *n) {
     if (n == NULL) return;
-    destroy_nodo(n->left);
-    destroy_nodo(n->right);
+    destroy_tree(n->left);
+    destroy_tree(n->right);
     free(n);
 }
 
@@ -41,37 +43,51 @@ void _print_tree(Nodo *n) {
     if (n == NULL) return;
 
     _print_tree(n->left);
-    printf("%d ", n->value);
+    printf("%4d,%4u\n", n->value, n->level);
     _print_tree(n->right);
 }
+
 void print_tree(Nodo *n) {
-    printf("Tree: \n");
+    printf("\x1b[1mTree:\n\x1b[0m");
     _print_tree(n);
     printf("\n");
 }
 
-int insert_tree(Nodo *n, int value, Nodo *f) {
-    if (n == NULL) {
+int _insert_tree(Nodo *actual, Nodo *father, int value) {
+    if (actual == NULL) {
         Nodo *new;
 
-        if ((new = (Nodo *) malloc(sizeof(Nodo))) == NULL)
-            return 1;
+        // ERRO: raiz NULA
+        if (!father) return 1;
+        // Erro: nao foi possivel criar nodo
+        if ((new = _create_nodo(father, value)) == NULL) return 1;
 
-        new->value = value;
-        new->level = (f->level + 1);
-        new->father = f;
-        new->left = NULL;
-        new->right = NULL;
-
-        if (value < f->value)
-            f->left = new;
+        // Coloca no PAI os ponteiros
+        if (value < father->value)
+            father->left = new;
         else
-            f->right = new;
+            father->right = new;
 
         return 0;
     }
 
-    if (value < n->value)
-        return insert_tree(n->left, value, n);
-    return insert_tree(n->right, value, n);
+    // Insere no local apropriado
+    // Insere o mesmo valor na frente (direita)
+    if (value < actual->value)
+        return _insert_tree(actual->left, actual, value);
+    return _insert_tree(actual->right, actual, value); 
+}
+
+int insert_tree(Nodo *root, int value) { 
+    return _insert_tree(root, NULL, value); 
+}
+
+int operate_tree(char c, int value, Nodo *root) {
+    switch(c) {
+        case 'i':
+        case 'r':
+            return !insert_tree(root, value);
+        default:
+            return 0;
+    }
 }
