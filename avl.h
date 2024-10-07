@@ -1,13 +1,23 @@
 #ifndef AVL_H_
 #define AVL_H_
 
-// Includes de todo o projeto
 #include <stdio.h>
 #include <stdlib.h>
 
+// TAD DE ARVORE AVL
+//
+// Operacoes: 
+//  0. CREATE TREE
+//  1. ADD VALUE
+//  2. ROTATE TREE (LEFT)
+//  3. VIEW TREE
+//  4. SEARCH VALUE
+//  5. TREE SIZE
+//  5. DELETE VALUE,
+//  6. DESTROY
+
 // Struct NODO
 struct NODO_STRUCT {
-    unsigned int level;
     int value;
 
     // Ponteiros para outros NODOs
@@ -17,37 +27,21 @@ struct NODO_STRUCT {
 };
 typedef struct NODO_STRUCT Nodo;
 
-// Imprime a ARVORE de forma recursiva
-// Imprime de forma ordenada
-void _print_tree(Nodo *n); // Função indireta
-void print_tree(Nodo *n); // Você deve usar esta árvore
+Nodo* create_avl(int value);
 
-// Deleta um NODO especifico da arvore
-// Se não encontrar 
-Nodo* delete_nodo(Nodo *root, int target);
+int insert_avl(Nodo *n, int value);
 
-// Cria a árvore AVL
-// Retorna o ponteiro da arvore criada
-Nodo* create_tree(int value);
+Nodo* rotate_avl_left(Nodo *n);
+Nodo* rotate_avl_right(Nodo *n);
 
-// Insere na arvore
-Nodo* _create_nodo(Nodo *father, int value);
-int _insert_tree(Nodo *actual, Nodo *father, int value);
-int insert_tree(Nodo *root, int value);
+void view_avl(Nodo *n); // Imprime de forma ORDENADA (EM ORDEM)
 
-// Destroi a arvore e livra a memoria alocada
-void destroy_tree(Nodo *root);
+Nodo* search_avl(Nodo *root, int value);
 
-// Entrada do tipo: I/R value
-// I - inserir valor
-// R - remover valor
-int operate_tree(char c, int value, Nodo *root);
+int size_avl(Nodo *root);
 
-// Rotacao de arvore
-void rotate_tree(Nodo *n);
+void delete_avl();
 
-// Retorna NULL para nao encontrado
-// Retorna o PONTEIRO para o nodo com o valor encontrado
-Nodo* search_binary(Nodo *root, int value);
+void destroy_avl(Nodo *n);
 
 #endif // AVL_H_

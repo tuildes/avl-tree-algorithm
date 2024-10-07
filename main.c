@@ -1,22 +1,23 @@
-#include "avl.h"
+#include "principal.h"
 
 int main (void) {
 
-    Nodo *root;
+    // Variaveis
+    Nodo *root = NULL;
+    bool started = false;
     char choose;
     int value;
 
-    root = create_tree(1);
-
+    // Faz todas as iteracoes da AVL
     do {
         scanf("%c %d", &choose, &value);
         getchar(); // Limpar buffer de char
-    } while (operate_tree(choose, value, root));
+    } while (!operate_tree(choose, value, &root, &started));
 
-    print_tree(root);
+    view_avl(root);
 
     // Libera memoria armazenada
-    destroy_tree(root);
+    destroy_avl(root);
 
     return 0;
 }

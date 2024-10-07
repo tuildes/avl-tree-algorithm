@@ -1,16 +1,20 @@
-OBJS	= main.o avl.o
-SOURCE	= main.c avl.c
-HEADER	= avl.h
+# Makefile to AVL TREE TAD
+
+OBJS	= main.o avl.o principal.o
+SOURCE	= main.c avl.c principal.c
+HEADER	= avl.h principal.h
 OUT	= myavl
 CC	 = gcc
 FLAGS	 = -g -c -Wall -Wextra -Werror
 LFLAGS	 = -lm
 
-all: $(OBJS)
+all: myavl
+
+myavl: $(OBJS)
 	$(CC) -g $(OBJS) -o $(OUT) $(LFLAGS)
 
-program.o: program.c
-	$(CC) $(FLAGS) $(OBJS) 
+valgrind: myavl
+	valgrind --leak-check=full --show-leak-kinds=all --leak-resolution=high --track-origins=yes --vgdb=yes ./myavl
 
 clean:
 	rm -f *.o *.gch $(OUT)

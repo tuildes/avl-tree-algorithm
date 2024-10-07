@@ -1,8 +1,127 @@
 #include "avl.h"
 
-Nodo* search_binary(Nodo *root, int value) {
-    if (root == NULL)
+// Funcoes indiretas da TAD AVL
+Nodo* __create_nodo(Nodo *father, int value);
+int __insert_avl(Nodo *n, Nodo *father, int value);
+
+Nodo* create_avl(int value) { return __create_nodo(NULL, value); }
+
+Nodo* __create_nodo(Nodo *father, int value) {
+    Nodo *n;
+
+    if ((n = (Nodo*)malloc(sizeof(Nodo))) == NULL)
         return NULL;
+
+    n->value = value;
+    
+    n->father = father;
+    n->left = NULL;
+    n->right = NULL;
+
+    return n; 
+}
+
+int __get_balanced(Nodo *n) {
+    if (n == NULL) return 0;
+
+    return size_avl(n->left) - size_avl(n->right);
+}
+
+void __balance_avl(Nodo *n) {
+    
+    int b = __get_balanced(n);
+
+    printf("Supostamente balancea (%d)\n", b);
+}
+
+int __insert_avl(Nodo *n, Nodo *father, int value) {
+
+    if (n == NULL) {
+        
+        Nodo *new = __create_nodo(father, value);
+
+        if (new == NULL) return 1; // ERRO DE ALOCACAO
+
+        if (value < father->value) father->left = new;
+        else father->right = new;
+
+        __balance_avl(new->father);
+
+        return 0; // SUCESSO
+    }
+
+    // BUSCA DE POSICAO
+    // INSERE IGUAIS A DIREITA
+    if (value < n->value) 
+        return __insert_avl(n->left, n, value);
+    return __insert_avl(n->right, n, value);
+}
+
+int insert_avl(Nodo *n, int value) {
+    return __insert_avl(n, n->father, value);
+}
+
+Nodo* rotate_avl_right(Nodo *n) {
+    Nodo *temp = n->left;
+    n->left = temp->right;
+    if(temp->right != NULL) temp->right->father = n;
+    temp->father = n->father;
+    n->father = temp;
+    temp->right = n;
+
+    return temp;
+}
+
+Nodo* rotate_avl_left(Nodo *n) {
+    Nodo *temp = n->right;
+    n->right = temp->left;
+    if(temp->left != NULL) temp->left->father = n;
+    temp->father = n->father;
+    n->father = temp;
+    temp->left = n;
+
+    return temp;
+}
+
+void __view_avl(Nodo *n, unsigned int level) {
+    if(n == NULL) return;
+
+    __view_avl(n->left, (level + 1));
+    printf("%d,%u\n", n->value, level);
+    __view_avl(n->right, (level + 1));
+}
+
+void view_avl(Nodo *n) {
+    if(n == NULL) return;
+    return __view_avl(n, 0);
+}
+
+Nodo* search_avl(Nodo *root, int value);
+
+int size_avl(Nodo *root) {
+    int hl, hr;
+
+    if (root == NULL) return -1;
+
+    hl = size_avl(root->left);
+    hr = size_avl(root->right);
+
+    if (hl > hr) return (hl + 1);
+    return (hr + 1);
+}
+
+void delete_avl();
+
+void destroy_avl(Nodo *n) {
+    if (n == NULL) return;
+    destroy_avl(n->left);
+    destroy_avl(n->right);
+    free(n);
+}
+
+/*
+Nodo* search_avl(Nodo *root, int value) {
+    if (root == NULL) return NULL;
 
     if (value < root->value)
         return search_binary(root->left, value);
@@ -11,83 +130,4 @@ Nodo* search_binary(Nodo *root, int value) {
         return search_binary(root->right, value);
 
     return root;
-}
-
-Nodo* _create_nodo(Nodo *father, int value) {
-    Nodo *n;
-
-    if ((n = (Nodo *) malloc(sizeof(Nodo))) == NULL)
-        return NULL;
-
-    n->value = value;
-    n->level = (father != NULL) ? (father->level + 1) : 0;
-    n->father = father;
-    n->left = NULL;
-    n->right = NULL;
-
-    return n; 
-}
-
-Nodo* create_tree(int value) { return _create_nodo(NULL, value); }
-
-// Destruir NODO
-void destroy_tree(Nodo *n) {
-    if (n == NULL) return;
-    destroy_tree(n->left);
-    destroy_tree(n->right);
-    free(n);
-}
-
-// Imprimir ARVORE (ordenado)
-void _print_tree(Nodo *n) {
-    if (n == NULL) return;
-
-    _print_tree(n->left);
-    printf("%4d,%4u\n", n->value, n->level);
-    _print_tree(n->right);
-}
-
-void print_tree(Nodo *n) {
-    printf("\x1b[1mTree:\n\x1b[0m");
-    _print_tree(n);
-    printf("\n");
-}
-
-int _insert_tree(Nodo *actual, Nodo *father, int value) {
-    if (actual == NULL) {
-        Nodo *new;
-
-        // ERRO: raiz NULA
-        if (!father) return 1;
-        // Erro: nao foi possivel criar nodo
-        if ((new = _create_nodo(father, value)) == NULL) return 1;
-
-        // Coloca no PAI os ponteiros
-        if (value < father->value)
-            father->left = new;
-        else
-            father->right = new;
-
-        return 0;
-    }
-
-    // Insere no local apropriado
-    // Insere o mesmo valor na frente (direita)
-    if (value < actual->value)
-        return _insert_tree(actual->left, actual, value);
-    return _insert_tree(actual->right, actual, value); 
-}
-
-int insert_tree(Nodo *root, int value) { 
-    return _insert_tree(root, NULL, value); 
-}
-
-int operate_tree(char c, int value, Nodo *root) {
-    switch(c) {
-        case 'i':
-        case 'r':
-            return !insert_tree(root, value);
-        default:
-            return 0;
-    }
-}
+} */
