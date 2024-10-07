@@ -38,7 +38,7 @@ void view_avl(Nodo *n); // Imprime de forma ORDENADA (EM ORDEM)
 
 Nodo* search_avl(Nodo *root, int value);
 
-int size_avl(Nodo *root);
+int height_avl(Nodo *root);
 
 void delete_avl();
 

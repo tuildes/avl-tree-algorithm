@@ -24,7 +24,7 @@ Nodo* __create_nodo(Nodo *father, int value) {
 int __get_balanced(Nodo *n) {
     if (n == NULL) return 0;
 
-    return size_avl(n->left) - size_avl(n->right);
+    return height_avl(n->left) - height_avl(n->right);
 }
 
 void __balance_avl(Nodo *n) {
@@ -98,13 +98,13 @@ void view_avl(Nodo *n) {
 
 Nodo* search_avl(Nodo *root, int value);
 
-int size_avl(Nodo *root) {
+int height_avl(Nodo *root) {
     int hl, hr;
 
     if (root == NULL) return -1;
 
-    hl = size_avl(root->left);
-    hr = size_avl(root->right);
+    hl = height_avl(root->left);
+    hr = height_avl(root->right);
 
     if (hl > hr) return (hl + 1);
     return (hr + 1);
