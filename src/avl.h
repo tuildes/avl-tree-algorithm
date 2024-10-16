@@ -1,16 +1,10 @@
 /*
     TAD de árvore AVL
 
-    OperaÇões:
-    1. Create tree
-    2. Add Value
-    3. Rotate Tree (left)
-    4. Rotate Tree (right)
-    5. View tree
-    6. Search Value
-    7. Tree size
-    8. Delete value
-    9. Destroy tree
+    Descrição
+
+    @tuildes - Gustavo Frehse
+    16/10/2024
 */
 
 #ifndef __AVL_H__
