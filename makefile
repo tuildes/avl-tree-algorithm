@@ -25,8 +25,8 @@ clean:
 valgrind: myavl
 	valgrind ./myavl
 
-valgrind_leakcheck: ./myavl
+valgrind_leakcheck: myavl
 	valgrind --leak-check=full ./myavl
 
-valgrind_extreme: LBP
-	valgrind --leak-check=full --show-leak-kinds=all --leak-resolution=high --track-origins=yes --vgdb=yes ./LBP
+valgrind_extreme: myavl
+	valgrind -s --leak-check=full --show-leak-kinds=all --leak-resolution=high --track-origins=yes --vgdb=yes ./myavl < input/teste0.in

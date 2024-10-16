@@ -15,10 +15,12 @@
 #include <stdlib.h>
 
 // Defines
+typedef enum { FALSE, TRUE } bool;
 
 // Estrutura de dados tipo NODO
 struct NODE_STRUCT {
     int value;
+    size_t level;
     struct NODE_STRUCT *father,
                        *left,
                        *right;
@@ -31,16 +33,17 @@ typedef struct NODE_STRUCT Node;
 Node* create_avl(int v);
 
 // Insere um valor V na arvore
-Node* insert_avl(int v, Node *root);
+// Coloca iguais a direita
+Node* insert_avl(int v, Node **root);
 
 // Rotaciona o nodo atual em um sentido
-void rotate_tree_avl(Node *n);
-void rotate_tree_avl(Node *n);
+Node* rotate_tree_avl_left(Node *n);
+Node* rotate_tree_avl_right(Node *n);
 
 // Imprime em pre ordem (ordenado)
 void view_avl(Node *n);
 
-// Procura um valor e retorna seu ponteiro (1 encontrado)
+// Procura um valor e retorna seu ponteiro (1 encontrado)                      
 // Retorna NULL para não encontrado
 Node* search_avl(int v, Node *root);
 
