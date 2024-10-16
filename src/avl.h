@@ -20,7 +20,6 @@ typedef enum { FALSE, TRUE } bool;
 // Estrutura de dados tipo NODO
 struct NODE_STRUCT {
     int value;
-    size_t level;
     struct NODE_STRUCT *father,
                        *left,
                        *right;

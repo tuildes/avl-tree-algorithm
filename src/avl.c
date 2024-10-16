@@ -2,7 +2,8 @@
 
 /* Assinaturas de funções indiretas */
 Node* __create_node(int v, Node* father);
-void __fix_height(Node* n, size_t h);
+int __balance_value(Node* n);
+Node* __adjustment_avl(Node *n);
 
 /* Implementação de AVL */
 Node* __create_node(int v, Node* father) {
@@ -16,47 +17,37 @@ Node* __create_node(int v, Node* father) {
     n->father = father;
     n->left = NULL;
     n->right = NULL;
-    if (n->father == NULL) n->level = 0;
-    else n->level = (father->level + 1);
 
     return n;
 }
 
-void __fix_height(Node* n, size_t h) {
-    if(n == NULL) return;
-    n->level = h;
-    __fix_height(n->left, (h+1));
-    __fix_height(n->right, (h+1));
-}
-
 int __balance_value(Node* n) {
     if (n == NULL) return 0;
+
     size_t hl = height_avl(n->left);
     size_t hr = height_avl(n->right);
+
     return (int)(hl - hr);
 }
 
 Node* __adjustment_avl(Node *n) {
     if (n == NULL) return NULL;
 
-    // int bv = __balance_value(n);
+    int bv = __balance_value(n);
     Node* adj = n;
 
-    // if (bv < -1) { // Desbalanceado na direita
-    //     // Direita-esquerda
-    //     if (__balance_value(n->right) > 1) {
-    //         n->right = rotate_tree_avl_right(n->right);
-    //         __fix_height(n->right,n->right->value);
-    //     }
-    //     adj = rotate_tree_avl_left(n); 
-    //     __fix_height(n,n->value);
-    // } 
-    // else if (bv > 1) { // Desbalanceado na esquerda
-    //     // Esquerda-direita
-    //     if (__balance_value(n->left) < -1)
-    //         n->left = rotate_tree_avl_left(n->left);
-    //     adj = rotate_tree_avl_right(n);
-    // }
+    if (bv < -1) { // Desbalanceado na direita
+        // Direita-esquerda
+        if (__balance_value(n->right) > 0) {
+             n->right = rotate_tree_avl_right(n->right);
+        }
+        adj = rotate_tree_avl_left(n); 
+    } else if (bv > 1) { // Desbalanceado na esquerda
+        // Esquerda-direita
+        if (__balance_value(n->left) < 0)
+            n->left = rotate_tree_avl_left(n->left);
+        adj = rotate_tree_avl_right(n);
+    }
 
     return adj;
 }
@@ -64,26 +55,26 @@ Node* __adjustment_avl(Node *n) {
 Node* create_avl(int v) { return __create_node(v, NULL); }
 
 Node* insert_avl(int v, Node **root) {
-    
-    *root = __adjustment_avl(*root);
 
     // Achar posicao para inserir
     if ((v < (*root)->value) && ((*root)->left != NULL))
-        return insert_avl(v, &(*root)->left); // Menor
-    if ((v >= (*root)->value) && ((*root)->right != NULL))
-        return insert_avl(v, &(*root)->right); // Maior igual
+        insert_avl(v, &(*root)->left); // Menor
+    else if ((v >= (*root)->value) && ((*root)->right != NULL))
+        insert_avl(v, &(*root)->right); // Maior igual
+    else {
+        Node* n = __create_node(v, *root);
+        if (n == NULL) return NULL; // Erro ao criar
 
-    // Criar a posicao e inserir na AVL
-    Node* n = __create_node(v, *root);
-    if (n == NULL) return NULL; // Erro ao criar
+        if (v < (*root)->value) {
+            (*root)->left = n;
+        } else {
+            (*root)->right = n;
+        }
 
-    if (v < (*root)->value) {
-        (*root)->left = n;
-    } else {
-        (*root)->right = n;
+        return *root;
     }
-
-    // Rotações
+    
+    *root = __adjustment_avl(*root);
     return *root;
 }
 
@@ -97,8 +88,6 @@ Node* rotate_tree_avl_left(Node *n) {
     if(temp->left != NULL)
         temp->left->father = n;
     temp->left = n;
-
-    __fix_height(temp, n->level);
 
     return temp;
 }
@@ -114,16 +103,21 @@ Node* rotate_tree_avl_right(Node *n) {
         temp->right->father = n;
     temp->right = n;
 
-    __fix_height(temp, n->level);
-
     return temp;
+}
+
+size_t inverse_height(Node *n) {
+    size_t i = 0;
+    for(Node *t = n; t != NULL; t = t->father)
+        i++;
+    return i - 1;
 }
 
 void view_avl(Node *root) {
     if(root == NULL) return;
 
     view_avl(root->left);
-    printf("%d, %lu, %d\n", root->value, root->level, __balance_value(root));
+    printf("%d, %lu\n", root->value, inverse_height(root));
     view_avl(root->right);
 }
 
@@ -143,6 +137,16 @@ size_t height_avl(Node *n) {
 
     if (hl > hr) return hl + 1;
     return hr + 1;
+}
+
+int delete_avl(int v, Node *root) {
+    if (root == NULL) return 0;
+    if (v < root->value)
+        return delete_avl(v, root->left);
+    else if (v > root->value)
+        return delete_avl(v, root->right);
+
+    // Casos de delete
 }
 
 void destroy_avl(Node *root) {
