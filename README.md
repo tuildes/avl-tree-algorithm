@@ -1,44 +1,40 @@
 <p align="center">
-  <img alt="Árvore da TABLER Icons" src="https://raw.githubusercontent.com/tabler/tabler-icons/6cd6f4df5501db67b221ba1595f7f31545041bc4/icons/filled/binary-tree.svg" height="120">
+  <img alt="TABLER's tree icon" src="https://raw.githubusercontent.com/tabler/tabler-icons/6cd6f4df5501db67b221ba1595f7f31545041bc4/icons/filled/binary-tree.svg" height="120">
   <h3 align="center">AVL Tree</h3>
   <p align="center">Implementation of AVL tree in C language</p>
 </p>
 
-## Sobre
-O projeto consiste em uma simples demonstração de uso de uma árvore AVL que aceita (pelo usuário) duas operações: ADICIONAR e REMOVER
+## About
+The project consists of a simple demonstration of the use of an AVL tree that accepts (by the user) two operations: ADD and REMOVE
 
-Além da parte demonstrativa do programa, o código do projeto tem todo um TAD implementado para futuros usos desta mesma árvore AVL como uma biblioteca funcional, além de adicionar e remover.
+In addition to the demonstration part of the program, the project code has an entire TAD implemented for future uses of this same AVL tree as a functional library, in addition to adding and removing.
 
-## Uso do programa (./myavl)
+## Usage (./myavl)
 
-### Rodando o programa (básico)
+### Compiling
 
 ```bash
-# Criar executaveis
 make;
-
-# Executar programa (limpo)
 ./myavl;
 
-# Exemplo de uso do programa (mais funcional)
+# Usage example (input and output)
 ./myavl < input.in > output.ou;
 
-# Limpar executáveis
+# Clean archives
 make clean;
 ```
 
-### Utilizando o programa
+### UUsing the program
+* The program accepts two types of input
+* The program consists of input lines (insert or remove) for its AVL, which at the end of the program prints an AVL tree in pre-order with the levels
 
-* O programa aceita dos tipos de entradas
-* O programa consiste em linhas de entradas (inserir ou remover) para a sua AVL, que ao fim do programa imprime uma arvore AVL em pre-ordem com os niveis
+* Insert number: `i 10`
+* Remove number: `r 10`
+  * If the number does not exist, just ignore the request
 
-* Inserir numero: `i 10`
-* Remover numero: `r 10`
-    * Se o numero nao existir, apenas ignora o pedido
+* To stop the program and print the tree, just reach an EOF or set an incompatible "mode" (different from I or R)
 
-* Para parar o programa e imprimer a arvore, basta chegar em uma EOF ou colocar um "modo" incompativel (diferente de I ou R)
-
-* Exemplo:
+* Example:
     ```plaintext
     i 3
     i 4
@@ -47,8 +43,8 @@ make clean;
 
 ### Output
 
-* No fim imprime uma arvore AVL de forma `numero, level`
-* Raiz sendo o numero 0
+* At the end, it prints an AVL tree in the form `number, level`
+* Root being the number 0
 
     ```plaintext
     10, 1
@@ -58,37 +54,32 @@ make clean;
 
 ## Arquivos
 
-* `avl.h`: assinaturas das funções do TAD de AVL, além da struct de nodo utilizado por toda a árvore.
-* `avl.c`: implementação das funções de manipulação de AVL, além de funções indiretas que auxilam esse processo.
-* `main.c`: programa promiamente dito, além de ter o main( )
+* `avl.h`: signatures of the AVL ADT functions, in addition to the node struct used throughout the tree.
+* `avl.c`: implementation of the AVL manipulation functions, in addition to indirect functions that assist this process.
+* `main.c`: the program itself, in addition to having main( )
 
 ## Funcionalidades
 
-### Funções indiretas (não podem ser chamadas)
+## Features
 
-* `Node* __create_node(int v, Node* father)` - uma função que cria um nodo novo (alocado dinamicamente) com um certo pai definido
-* `int __balance_value(Node* n)` - acha o valor de balanceamento de um nodo, sendo 2 para desbalanceado na direita e -2 para desbalanceado a esquerda.
-* `Node* __adjustment_avl(Node *n)` - apenas verifica se precisa de balanceamento e faz o ajuste da arvore nos moldes da AVL (usado no inserir e deletar)
+### Indirect functions (cannot be called)
 
-### Funções de TAD AVL
+* `Node* __create_node(int v, Node* father)` - a function that creates a new node (dynamically allocated) with a certain defined parent
+* `int __balance_value(Node* n)` - finds the balance value of a node, being 2 for unbalanced on the right and -2 for unbalanced on the left.
+* `Node* __adjustment_avl(Node *n)` - just checks if it needs balancing and adjusts the tree according to the AVL (used when inserting and deleting)
+  
+### TAD AVL functions
 
-* `Node* create_avl(int v)` - cria a arvore avl e retorna seu ponteiro de forma dinamica - util para o primeiro elemento
-* `Node* insert_avl(int v, Node **root)` - insere um elemento numa arvore avl ja criada previamente e balancea a AVL
-* `Node* rotate_tree_avl_left(Node *n)` - rotaciona a arvore para a esquerda
-* `Node* rotate_tree_avl_right(Node *n)` - rotaciona a arvore para a direita
-* `void view_avl(Node *n)` - imprime a avl de forma "numero, level" em uma pre-ordem (ordenado)
-* `Node* search_avl(int v, Node *root)` - procura um elemento e retorna seu nodo caso seja encontrado (retorna o primeiro numero encontrado)
-* `size_t height_avl(Node *n)` - retorna o tamanho da arvore atual
-* `Node* delete_avl(int v, Node *root)` - deleta um numero definido, caso nao tenha o numero, apenas nao faz nada. Caso encontre, deleta o numero e balanceia a arvore
-* `void destroy_avl(Node *root)` - destroi a avl no fim, desalocando toda a memoria alocada.
-
-<!--
-## Licença
-Licenciado sob a licença XXX. Veja o arquivo `LICENSE` para mais detalhes.
--->
+* `Node* create_avl(int v)` - creates the avl tree and returns its pointer dynamically - useful for the first element
+* `Node* insert_avl(int v, Node **root)` - inserts an element into a previously created avl tree and balances the AVL
+* `Node* rotate_tree_avl_left(Node *n)` - rotates the tree to the left
+* `Node* rotate_tree_avl_right(Node *n)` - rotates the tree to the right
+* `void view_avl(Node *n)` - prints the avl in the form "number, level" in a pre-order (ordered)
+* `Node* search_avl(int v, Node *root)` - searches for an element and returns its node if found (returns the first number found)
+* `size_t height_avl(Node *n)` - returns the size of the current tree
+* `Node* delete_avl(int v, Node *root)` - deletes a defined number, if it doesn't have the number, it just does nothing. If found, delete the number and balance the tree
+* `void destroy_avl(Node *root)` - destroys the avl at the end, deallocating all allocated memory.
 
 <br />
 
-<p align="center">Criado com 💙 por <a href="https://github.com/tuildes">tuildes</a></p>
-
-[^1]: Faculdade de **Informática Biomédica** na Universidade Federal do Paraná no ano de 2024 (primeiro semestre), o curso se consiste em uma matriz de ciência da computação com matérias focadas as áreas biomédicas e aplicações da computação em áreas médicas, como genética.
+<p align="center">Created with 💙 by <a href="https://github.com/tuildes">tuildes</a></p>
