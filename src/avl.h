@@ -1,7 +1,7 @@
 /*
     TAD de árvore AVL
-
-    Descrição
+    Implementação de árvore AVL, contendo funções básicas de adicionar,
+    procurar, remover, deletar, criar e imprimir
 
     @tuildes - Gustavo Frehse
     16/10/2024
@@ -13,9 +13,6 @@
 // Includes
 #include <stdio.h>
 #include <stdlib.h>
-
-// Defines
-typedef enum { FALSE, TRUE } bool;
 
 // Estrutura de dados tipo NODO
 struct NODE_STRUCT {
@@ -51,7 +48,7 @@ size_t height_avl(Node *n);
 
 // Deleta um valor da AVL
 // Retorna o valor removido ou 0 para não encontrado
-int delete_avl(int v, Node *root);
+Node* delete_avl(int v, Node *root);
 
 // Destroi a AVL atual e desaloca memória
 void destroy_avl(Node *root);

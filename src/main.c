@@ -3,19 +3,17 @@
 int main(void) { 
     
     // Variaveis
-    Node *avl;
+    Node *avl = NULL, *temp;
     char modeInput;
     int valueInput;
-    bool created = FALSE;
 
     while(scanf("%c %d", &modeInput, &valueInput) != EOF) {
         getchar(); // Limpar buffer
         if (modeInput == 'i') {
             // Se nao tiver sido criada, cria a arvore
-            if (!created) {
+            if (avl == NULL) {
                 avl = create_avl(valueInput);
                 if (avl == NULL) return 1; // Erro de criacao de AVL
-                created = TRUE;
                 continue;
             }
 
@@ -26,6 +24,13 @@ int main(void) {
             }
 
             // printf(" %p (real)\n", avl);
+        } else if (modeInput == 'r') {
+            temp = delete_avl(valueInput, avl);
+            if ((temp == NULL) && (avl->left == NULL) && (avl->right == NULL))
+                avl = NULL;
+            else if(temp->father == NULL)
+                avl = temp;
+
         } else {
             break; // Acaba as iteracoess
         }

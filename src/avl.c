@@ -1,9 +1,9 @@
 #include "avl.h"
 
 /* Assinaturas de funções indiretas */
-Node* __create_node(int v, Node* father);
-int __balance_value(Node* n);
-Node* __adjustment_avl(Node *n);
+Node* __create_node(int v, Node* father); // Criacao de nodo
+int __balance_value(Node* n); // Descobre o valor de balanceamento
+Node* __adjustment_avl(Node *n); // Faz o ajuste de AVL
 
 /* Implementação de AVL */
 Node* __create_node(int v, Node* father) {
@@ -117,7 +117,7 @@ void view_avl(Node *root) {
     if(root == NULL) return;
 
     view_avl(root->left);
-    printf("%d, %lu\n", root->value, inverse_height(root));
+    printf("%d,%lu\n", root->value, inverse_height(root));
     view_avl(root->right);
 }
 
@@ -139,14 +139,43 @@ size_t height_avl(Node *n) {
     return hr + 1;
 }
 
-int delete_avl(int v, Node *root) {
-    if (root == NULL) return 0;
-    if (v < root->value)
-        return delete_avl(v, root->left);
-    else if (v > root->value)
-        return delete_avl(v, root->right);
+Node* max_avl(Node *n) {
+    if (n->right != NULL) return max_avl(n->right);
+    return n;
+}
 
-    // Casos de delete
+Node* delete_avl(int v, Node *root) {
+    // Nao encontrado
+    if (root == NULL) return NULL;
+
+    // Acessar o lugar certo de delete
+    if (v < root->value) {
+        root->left = delete_avl(v, root->left);
+
+    } else if (v > root->value) {
+        root->right = delete_avl(v, root->right);
+
+    // Deletar
+    } else {
+        Node *temp;
+        if (root->left == NULL) { // Filho direito apenas
+            Node *rightChild = root->right;
+            free(root);
+            return rightChild;
+        } else if (root->right == NULL) { // Filho esquerdo apenas
+            Node *leftChild = root->left;
+            free(root);
+            return leftChild;
+
+        } else { // Dois filhos (nos)
+            temp = max_avl(root->left); // Find max in left subtree
+            root->value = temp->value;
+            root->left = delete_avl(temp->value, root->left);
+        }
+    }
+
+    // Ajuste da árvore AVL
+    return __adjustment_avl(root);
 }
 
 void destroy_avl(Node *root) {
